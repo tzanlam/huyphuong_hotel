@@ -1,0 +1,47 @@
+/* Nền màu xanh */
+.main-page {
+    background-color: #3a7bd5; /* Màu xanh */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Khung ở giữa */
+.login-container {
+    background-color: white; /* Màu trắng cho khung */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+/* Logo bên trái css trực tiếp vào mainPage*/
+.logo {
+    width: 50px; /* Điều chỉnh kích thước logo */
+    height: 50px;
+    object-fit: cover;
+    margin-right: 20px; /* Tạo khoảng cách với các button */
+}
+
+/* Nhóm button bên phải */
+.right-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Khoảng cách giữa các nút */
+}
+
+/* Nút của admin màu xanh */
+.admin-button {
+    background-color: #1890ff; /* Màu xanh của Ant Design */
+    color: white;
+    border-color: #1890ff;
+}
+
+/* Nút của khách hàng màu trắng */
+.customer-button {
+    background-color: white;
+    color: #1890ff; /* Màu chữ xanh */
+    border-color: #1890ff;
+}
