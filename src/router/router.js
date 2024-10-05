@@ -3,6 +3,7 @@ import MainPage from "../pages/MainPage";
 import LoginPage from "../pages/LoginPage";
 import HomeGuest from "../pages/guest/HomeGuest";
 import HomeAdmin from "../pages/admin/HomeAdmin";
+import BookingsComponents from "../components/admin/BookingsComponents";
 
 
 const router = createBrowserRouter([
@@ -20,7 +21,11 @@ const router = createBrowserRouter([
 },
 {
     path: "/homeadmin",
-    element: <HomeAdmin/>
+    element: <HomeAdmin/>,
+    children: [{
+        path: "/bookings",
+        element: <BookingsComponents/>
+    }]
 }
 ])
 
