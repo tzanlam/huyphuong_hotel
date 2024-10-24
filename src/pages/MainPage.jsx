@@ -4,6 +4,8 @@
     import { Image, Button } from "antd";
     import '../assets/css/MainPage.css'; // Thêm file CSS cho phần style
     import logo from '../assets/logo/logo.jpg'
+    import 'react-toastify/dist/ReactToastify.css';
+
     const MainPage = () => {
         const navigate = useNavigate();
 

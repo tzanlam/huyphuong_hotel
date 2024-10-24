@@ -5,7 +5,7 @@ const AuthService = {
         return api.post("auth/createRoom", roomRequest)
     },
     updateRoom(id, roomRequest){
-        return api.put(`auth/updateRoom/${id}`, roomRequest)
+        return api.put("auth/updateRoom/"+id, roomRequest)
     },
     deleteRoom(id){
         return api.get(`auth/deleteRoom/${id}`)

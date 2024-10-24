@@ -1,8 +1,5 @@
 import axios from "axios";
 
-// lấy token từ localStorage
-const token = localStorage.getItem("token")
-
 export const api = axios.create({
     baseURL: "http://localhost:8080/",
     timeout: 5000,
@@ -11,10 +8,15 @@ export const api = axios.create({
     }
 })
 
-//thêm token vào headers
-if(token){
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`
-}
+api.interceptors.request.use(function (config) {
+const token = localStorage.getItem("token")
+    if(token){
+        config.headers.Authorization = `Bearer ${token}`
+    }
+    return config;
+  }, function (error) {
+    return Promise.reject(error);
+  });
 
 // intercreptor xử lí response
 api.interceptors.response.use(
@@ -23,7 +25,7 @@ api.interceptors.response.use(
     },
     (error)=>{
         if(error.response.status === 401){
-            window.location.href = "/"
+            // window.location.href = "/"
         }
         return Promise.reject(error)
     }

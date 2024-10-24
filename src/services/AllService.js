@@ -12,6 +12,20 @@ const AllService = {
     },
     findRoomById(id){
         return api.get(`all/findRoomById/${id}`)
+    },
+    uploadImage(file){
+        const formData = new FormData();
+        formData.append("file", file); // Thêm file vào form-data
+    
+        return api.post("auth/postImg", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data", // Đảm bảo sử dụng header form-data
+            },
+        });
+    },
+    checkRoom(startDate, endDate){
+        return api.get(`all/checkRoom/${startDate}/${endDate}`)
     }
-}
-export default AllService
+};
+
+export default AllService;

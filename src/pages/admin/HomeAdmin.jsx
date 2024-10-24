@@ -3,6 +3,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined, UploadOutlined, UserOutlined, Hom
 import { Button, Layout, Menu, theme, Dropdown, Space, Image } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom'; // Import Outlet
 import logo from "../../assets/logo/logo.jpg"; // Đường dẫn đến logo
+import 'react-toastify/dist/ReactToastify.css';
 
 const { Header, Sider, Content } = Layout;
 
@@ -34,7 +35,7 @@ const HomeAdmin = () => {
   ];
 
   return (
-    <Layout style={{ paddingLeft: "20px", paddingRight: "20px" }}> 
+    <Layout style={{ paddingLeft: "20px", paddingRight: "20px", height: '100vh' }}> 
       <Sider trigger={null} collapsible collapsed={collapsed} style={{ backgroundColor: "#CCCCCC" }}>
         {/* Logo tĩnh ở giữa thanh taskbar */}
         <div style={{ 

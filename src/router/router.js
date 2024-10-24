@@ -4,6 +4,7 @@ import LoginPage from "../pages/LoginPage";
 import HomeGuest from "../pages/guest/HomeGuest";
 import HomeAdmin from "../pages/admin/HomeAdmin";
 import BookingsComponents from "../components/admin/BookingsComponents";
+import RoomComponents from "../components/admin/RoomComponents";
 
 
 const router = createBrowserRouter([
@@ -23,9 +24,14 @@ const router = createBrowserRouter([
     path: "/homeadmin",
     element: <HomeAdmin/>,
     children: [{
-        path: "/bookings",
+        path: "bookings",
         element: <BookingsComponents/>
-    }]
+    },
+    {
+        path: "rooms",
+        element: <RoomComponents/>
+    }
+]
 }
 ])
 

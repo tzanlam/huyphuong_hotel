@@ -4,6 +4,7 @@ import logo from "../assets/logo/logo.jpg";
 import { useNavigate } from 'react-router-dom';
 import AllService from '../services/AllService';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginPage = () => {
     const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
