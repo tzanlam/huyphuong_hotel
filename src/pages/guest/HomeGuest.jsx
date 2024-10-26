@@ -41,12 +41,13 @@ const HomeGuest = () => {
         <div>
           <iframe
             title="Bản đồ khách sạn"
-            src="https://maps.app.goo.gl/7Ng5ZCLX2jLBdkds5"
+            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3918.3709427725935!2d106.56032151057424!3d10.859365389249838!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1729952981863!5m2!1svi!2s"
             width="100%"
             height="300"
             style={{ border: 0 }}
             allowFullScreen=""
             loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
       </Footer>
