@@ -186,11 +186,10 @@ const RoomComponents = () => {
             rules={[{
                 required: true,
                 type: "number",
-                min: 1,
-                message: "Số giường phải lớn hơn 0",
+                min: 0,
               }]}
           >
-            <InputNumber min={1} />
+            <InputNumber min={0} />
           </Form.Item>
           <Form.Item
             label="Số lượng phòng"
@@ -198,11 +197,10 @@ const RoomComponents = () => {
             rules={[{
                 required: true,
                 type: "number",
-                min: 1,
-                message: "Số lượng phòng phải lớn hơn 0",
+                min: 0,
               }]}
           >
-            <InputNumber min={1} />
+            <InputNumber min={0} />
           </Form.Item>
           <Form.Item label="Mô tả" name="description">
             <Input.TextArea />
