@@ -8,6 +8,7 @@ import RoomComponents from "../components/admin/RoomComponents";
 import RoomCard from "../components/user/RoomCard";
 import BookingForm from "../components/user/Booking";
 import Contact from "../components/user/Contact";
+import SearchRoom from "../components/user/SearchRoom";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
     path: "/home",
     element: <HomeGuest />,
     children: [
+      {
+        path: "searchRoom",
+        element: <SearchRoom/>
+      },
       {
         path: "roomguest",
         element: <RoomCard />,
