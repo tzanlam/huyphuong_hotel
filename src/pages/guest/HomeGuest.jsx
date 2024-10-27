@@ -1,117 +1,53 @@
 // HomeGuest.js
-import React, { useEffect, useState } from "react";
-import { Layout, Row, Col, DatePicker, Button, message } from "antd";
-import AllService from "../../services/AllService";
-import HeaderGuest from "../../components/user/HeaderGuest";
-import RoomCard from "../../components/user/RoomCard";
-import RoomModal from "../../components/user/RoomModal";
-import BookingForm from "../../components/user/Booking";
+import React, { useState } from "react";
+import { Layout, Menu } from "antd";
+import { Outlet, useNavigate } from "react-router-dom";
 
-const { Header, Content, Footer } = Layout;
-const { RangePicker } = DatePicker;
+const { Header, Footer } = Layout;
 
 const HomeGuest = () => {
-  const [rooms, setRooms] = useState([]);
-  const [selectedRoom, setSelectedRoom] = useState(null);
-  // eslint-disable-next-line no-unused-vars
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [currentMenu, setCurrentMenu] = useState("homeguest");
-
-  useEffect(() => {
-    fetchRooms();
-  }, []);
-
-  const fetchRooms = async () => {
-    try {
-      const response = await AllService.findRoom();
-      setRooms(response.data);
-    } catch (error) {
-      message.error("Lỗi khi tải danh sách phòng");
-    }
-  };
-
-  const handleSearch = async (dates) => {
-    if (dates) {
-      const [checkin, checkout] = dates;
-      const formattedCheckin = checkin.format("YYYY-MM-DD HH:mm:ss");
-      const formattedCheckout = checkout.format("YYYY-MM-DD HH:mm:ss");
-
-      try {
-        const response = await AllService.checkRoom(formattedCheckin, formattedCheckout);
-        setRooms(response.data);
-      } catch (error) {
-        message.error("Lỗi khi tìm kiếm phòng.");
-      }
-    }
-  };
-
-  const handleBookingSubmit = async (formData) => {
-    try {
-      const response = await AllService.createBooking(formData);
-      
-      message.success("Đặt phòng thành công!");
-    } catch (error) {
-      message.error("Lỗi khi đặt phòng.");
-    }
-  };
+  const [currentMenu, setCurrentMenu] = useState("home");
+  const navigate = useNavigate();
 
   return (
     <Layout>
       <Header>
-        <HeaderGuest currentMenu={currentMenu} setCurrentMenu={setCurrentMenu} />
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          selectedKeys={[currentMenu]}
+          onClick={(e) => setCurrentMenu(e.key)}
+        >
+          <Menu.Item key="home" onClick={() => navigate("/home/searchRoom")}>
+            Trang chủ
+          </Menu.Item>
+          <Menu.Item key="roomguest" onClick={() => navigate("/home/roomguest")}>
+            Loại phòng
+          </Menu.Item>
+          <Menu.Item key="bookingguest" onClick={() => navigate("/home/bookingguest")}>
+            Đặt phòng
+          </Menu.Item>
+          <Menu.Item key="contact" onClick={() => navigate("/home/contact")}>
+            Liên hệ
+          </Menu.Item>
+        </Menu>
       </Header>
 
-      <Content style={{ padding: "50px" }}>
-        {currentMenu === "homeguest" && (
-          <>
-            <div style={{ marginBottom: "20px" }}>
-              <RangePicker onChange={handleSearch} />
-              <Button type="primary" style={{ marginLeft: "10px" }}>
-                Tìm phòng
-              </Button>
-            </div>
-            <Row gutter={[16, 16]}>
-              {rooms.map((room) => (
-                <Col span={8} key={room.id}>
-                  <RoomCard room={room} onClick={setSelectedRoom} />
-                </Col>
-              ))}
-            </Row>
-          </>
-        )}
-
-        {currentMenu === "roomguest" && (
-          <Row gutter={[16, 16]}>
-            {rooms.map((room) => (
-              <Col span={8} key={room.id}>
-                <RoomCard room={room} onClick={setSelectedRoom} />
-              </Col>
-            ))}
-          </Row>
-        )}
-
-        {currentMenu === "bookingguest" && (
-          <BookingForm onSubmit={handleBookingSubmit} />
-        )}
-      </Content>
-
-      <RoomModal
-        room={selectedRoom}
-        isVisible={!!selectedRoom}
-        onClose={() => setSelectedRoom(null)}
-      />
+      {/* Load nội dung các mục bên trong Outlet */}
+      <Outlet />
 
       <Footer style={{ textAlign: "center" }}>
         <h3>Vị trí khách sạn</h3>
         <div>
           <iframe
             title="Bản đồ khách sạn"
-            src="https://maps.app.goo.gl/7Ng5ZCLX2jLBdkds5"
+            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3918.3709427725935!2d106.56032151057424!3d10.859365389249838!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1729952981863!5m2!1svi!2s"
             width="100%"
             height="300"
             style={{ border: 0 }}
             allowFullScreen=""
             loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
       </Footer>
