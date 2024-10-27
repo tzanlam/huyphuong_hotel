@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Input, Button, Select, Form, Typography, Space } from 'antd';
+import { Input, Button, Select, Form, Typography, Space, message } from 'antd';
 import { PhoneOutlined, FacebookOutlined } from '@ant-design/icons';
+import AllService from '../../services/AllService'; // Đảm bảo đúng đường dẫn tới file api của bạn
 
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
@@ -8,16 +9,28 @@ const { Option } = Select;
 
 const Contact = () => {
     const [otherSubject, setOtherSubject] = useState(false);
+    const [loading, setLoading] = useState(false); // Trạng thái loading
 
     const handleSubjectChange = (value) => {
         setOtherSubject(value === 'other');
     };
 
-    const onFinish = (values) => {
-        console.log('Dữ liệu đã nhập:', values);
-        alert("Thông tin của bạn đã được gửi thành công!");
-        // Có thể thêm xử lý gửi email tới email "tzanlam@gmail.com" tại đây
+    const onFinish = async (values) => {
+        setLoading(true); // Bắt đầu loading
+        try {
+            // Gửi dữ liệu qua API
+            await AllService.sendMail(values);
+            message.success("Thông tin của bạn đã được gửi thành công!");
+            setLoading(false); // Dừng loading khi thành công
+            form.resetFields(); // Reset form
+        } catch (error) {
+            message.error("Đã xảy ra lỗi khi gửi thông tin. Vui lòng thử lại!");
+            setLoading(false); // Dừng loading khi lỗi
+            console.error("Error sending email:", error);
+        }
     };
+
+    const [form] = Form.useForm(); // Khởi tạo form instance để reset
 
     return (
         <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
@@ -25,7 +38,7 @@ const Contact = () => {
                 Hãy gửi cho chúng tôi nếu bạn cần hỗ trợ
             </Title>
             
-            <Form layout="vertical" onFinish={onFinish}>
+            <Form form={form} layout="vertical" onFinish={onFinish}>
                 <Form.Item
                     label="Họ và tên"
                     name="name"
@@ -72,7 +85,7 @@ const Contact = () => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" block>
+                    <Button type="primary" htmlType="submit" loading={loading} block>
                         Gửi
                     </Button>
                 </Form.Item>

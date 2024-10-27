@@ -25,6 +25,12 @@ const AllService = {
     },
     checkRoom(startDate, endDate){
         return api.get(`all/checkRoom/${startDate}/${endDate}`)
+    },
+    sendMail(UserSendRequest){
+        return api.post(`all/sendMail`, UserSendRequest)
+    },
+    checkRoomName(id){
+        return api.get(`all/findRoomName/${id}`)
     }
 };
 
