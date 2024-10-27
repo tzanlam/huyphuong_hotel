@@ -23,6 +23,7 @@ public class GlobalServiceImpl implements GlobalService {
         // Thiết kế nội dung email dưới dạng form
         StringBuilder emailContent = new StringBuilder();
         emailContent.append("Khách hàng yêu cầu hỗ trợ\n\n")
+                .append("Tên khách hàng: ").append(request.getUsername()).append("\n")
                 .append("Email khách hàng: ").append(request.getTo()).append("\n")
                 .append("Chủ đề yêu cầu: ").append(request.getSubject()).append("\n")
                 .append("Nội dung yêu cầu: ").append(request.getContent()).append("\n\n")
