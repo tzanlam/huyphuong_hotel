@@ -84,6 +84,17 @@ public class RoomServiceImpl implements RoomService {
         return availableRooms;
     }
 
+    @Override
+    public String findNameRoomByID(int id) {
+        Room room = roomRepository.findById(id).orElse(null);
+        if (room == null) {
+            return null;
+        }else {
+            String roomName = room.getRoomName();
+            return roomName;
+        }
+    }
+
     private Room populateRoom(RoomRequest request) throws IOException {
         Room room = new Room();
         room.setRoomName(request.getRoomName());
