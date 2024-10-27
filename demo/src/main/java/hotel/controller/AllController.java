@@ -6,9 +6,11 @@ import hotel.modal.reponse.DTO.BookingDTO;
 import hotel.modal.reponse.DTO.RoomDTO;
 import hotel.modal.request.BookingRequest;
 import hotel.modal.request.LoginRequest;
+import hotel.modal.request.SendMailRequest;
 import hotel.service.booking.BookingService;
 import hotel.service.global.AuthService;
 import hotel.service.global.CloudinaryService;
+import hotel.service.global.GlobalService;
 import hotel.service.room.RoomService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class AllController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private GlobalService globalService;
 
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -69,5 +74,14 @@ public class AllController {
     @GetMapping("/checkRoom/{startDate}/{endDate}")
     public ResponseEntity<?> checkRoom(@PathVariable String startDate, @PathVariable String endDate) {
         return new ResponseEntity<>(roomService.checkRoomAvailability(startDate, endDate), HttpStatus.OK);
+    }
+
+    @PostMapping("/sendMail")
+    public ResponseEntity<?> sendMail(@RequestBody SendMailRequest request) {
+        try {
+            return new ResponseEntity<>(globalService.userSendMail(request), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
