@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button, DatePicker, Select, Typography, message } from "antd";
 import AllService from "../../services/AllService";
 import moment from "moment";
@@ -9,74 +9,71 @@ const { Title } = Typography;
 
 const BookingForm = ({ onSubmit }) => {
   const [form] = Form.useForm();
-  const [availableRooms, setAvailableRooms] = useState([]); // Đảm bảo là một mảng
-  const [roomName, setRoomName] = useState(""); // Tên phòng đã chọn
+  const [availableRooms, setAvailableRooms] = useState([]);
+  const [dates, setDates] = useState(null); // State lưu trữ ngày
 
+  // Hàm fetchRooms lấy danh sách phòng trống
   const fetchRooms = async (checkin, checkout) => {
     try {
       const rooms = await AllService.checkRoom(checkin, checkout);
       if (Array.isArray(rooms)) {
-        setAvailableRooms(rooms); // Cập nhật danh sách phòng có sẵn
+        setAvailableRooms(rooms);
       } else {
-        setAvailableRooms([]); // Nếu không phải mảng, đặt về mảng rỗng
+        setAvailableRooms([]);
       }
     } catch (error) {
       message.error("Có lỗi khi chọn khoảng thời gian");
     }
   };
 
-  const findRoomName = async (id) => {
-    try {
-      const name = await AllService.checkRoomName(id);
-      setRoomName(name); // Cập nhật tên phòng
-    } catch (error) {
-      message.error("Có lỗi khi hiện tên phòng");
+  // useEffect để kiểm tra khi tất cả các trường khác đã được điền mà `dates` chưa có
+  useEffect(() => {
+    const { fullName, phoneNumber, typeBooking } = form.getFieldsValue();
+    if (fullName && phoneNumber && typeBooking && !dates) {
+      // Lấy ngày mặc định để gọi fetchRooms, ví dụ: ngày hiện tại
+      const checkin = moment().format("YYYY-MM-DD HH:mm:ss");
+      const checkout = moment().add(1, "days").format("YYYY-MM-DD HH:mm:ss");
+      fetchRooms(checkin, checkout);
     }
-  };
+  }, [form, dates]);
 
   const Booking = async (values) => {
-    try{
-      await AllService.createBooking(values);
-      toast.success("Đặt phòng thành công.\nVui lòng kiểm tra mail.")
-    }
-    catch(error){
-      toast.error("xảy ra lỗi không mong muốn")
+    try {
+      const { dates, ...otherValues } = values;
+      const checkin = dates[0].format("YYYY-MM-DD HH:mm:ss");
+      const checkout = dates[1].format("YYYY-MM-DD HH:mm:ss");
+
+      await AllService.createBooking({ ...otherValues, checkin, checkout });
+      toast.success("Đặt phòng thành công.\nVui lòng kiểm tra mail.");
+    } catch (error) {
+      toast.error("Xảy ra lỗi không mong muốn");
       console.error(error);
     }
   };
 
-  const handleDateChange = (dates) => {
-    if (dates) {
-      const checkin = dates[0].format('YYYY-MM-DD HH:mm:ss');
-      const checkout = dates[1].format('YYYY-MM-DD HH:mm:ss');
-      fetchRooms(checkin, checkout); // Gọi fetchRooms để lấy danh sách phòng
-    }
+  const handleDateChange = (selectedDates) => {
+    setDates(selectedDates); // Cập nhật `dates`
   };
 
   const handleBookingTypeChange = (type) => {
-    const now = moment();
     if (type === 1) { // Thuê theo giờ
       form.setFieldsValue({
         dates: [moment().hour(6).minute(0), moment().hour(22).minute(0)],
       });
     } else if (type === 2) { // Thuê theo ngày
       form.setFieldsValue({
-        dates: [moment().hour(14).minute(0), moment().add(1, 'days').hour(12).minute(0)],
+        dates: [moment().hour(14).minute(0), moment().add(1, "days").hour(12).minute(0)],
       });
     } else if (type === 3) { // Thuê qua đêm
       form.setFieldsValue({
-        dates: [moment().hour(22).minute(0), moment().add(1, 'days').hour(12).minute(0)],
+        dates: [moment().hour(22).minute(0), moment().add(1, "days").hour(12).minute(0)],
       });
     }
   };
 
-  const handleRoomChange = (value) => {
-    findRoomName(value); // Tìm tên phòng khi ID phòng thay đổi
-  };
-
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <Title level={2} style={{ textAlign: 'center', marginBottom: '20px' }}>
+    <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
+      <Title level={2} style={{ textAlign: "center", marginBottom: "20px" }}>
         Đặt Phòng
       </Title>
 
@@ -85,11 +82,8 @@ const BookingForm = ({ onSubmit }) => {
           name="typeBooking" 
           label="Loại đặt" 
           rules={[{ required: true, message: "Vui lòng chọn loại đặt phòng!" }]}
-          onChange={e => handleBookingTypeChange(e.target.value)} // Gọi hàm khi thay đổi loại đặt
         >
-          <Select 
-            placeholder="Chọn loại đặt phòng"
-          >
+          <Select placeholder="Chọn loại đặt phòng" onChange={handleBookingTypeChange}>
             <Select.Option value={1}>Thuê theo giờ</Select.Option>
             <Select.Option value={2}>Thuê theo ngày</Select.Option>
             <Select.Option value={3}>Thuê qua đêm</Select.Option>
@@ -101,11 +95,11 @@ const BookingForm = ({ onSubmit }) => {
           label="Thời gian" 
           rules={[{ required: true, message: "Vui lòng chọn thời gian!" }]}
         >
-          <RangePicker 
-            showTime 
-            format="YYYY-MM-DD HH:mm" // Không hiển thị giây
-            onChange={handleDateChange} 
-            disabledDate={(current) => current && current < moment().endOf('day')}
+          <RangePicker
+            showTime
+            format="YYYY-MM-DD HH:mm"
+            onChange={handleDateChange}
+            disabledDate={(current) => current && current < moment().endOf("day")}
           />
         </Form.Item>
 
@@ -130,10 +124,7 @@ const BookingForm = ({ onSubmit }) => {
           label="Chọn phòng" 
           rules={[{ required: true, message: "Vui lòng chọn phòng!" }]}
         >
-          <Select 
-            placeholder="Chọn phòng"
-            onChange={handleRoomChange}
-          >
+          <Select placeholder="Chọn phòng">
             {availableRooms.map((room) => (
               <Select.Option key={room.id} value={room.id}>
                 {room.roomName}
