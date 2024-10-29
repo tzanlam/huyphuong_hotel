@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, Button, DatePicker, Select, Typography, message } from "antd";
 import AllService from "../../services/AllService";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
@@ -33,8 +34,15 @@ const BookingForm = ({ onSubmit }) => {
     }
   };
 
-  const handleFinish = (values) => {
-    onSubmit(values); // Gửi dữ liệu form lên hàm cha
+  const Booking = async (values) => {
+    try{
+      await AllService.createBooking(values);
+      toast.success("Đặt phòng thành công.\nVui lòng kiểm tra mail.")
+    }
+    catch(error){
+      toast.error("xảy ra lỗi không mong muốn")
+      console.error(error);
+    }
   };
 
   const handleDateChange = (dates) => {
@@ -72,7 +80,7 @@ const BookingForm = ({ onSubmit }) => {
         Đặt Phòng
       </Title>
 
-      <Form form={form} onFinish={handleFinish} layout="vertical">
+      <Form form={form} onFinish={Booking} layout="vertical">
         <Form.Item 
           name="typeBooking" 
           label="Loại đặt" 
