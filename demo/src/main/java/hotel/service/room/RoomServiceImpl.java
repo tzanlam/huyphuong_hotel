@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -85,14 +86,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public String findNameRoomByID(int id) {
-        Room room = roomRepository.findById(id).orElse(null);
-        if (room == null) {
-            return null;
-        }else {
-            String roomName = room.getRoomName();
-            return roomName;
+    public List<String> findNameRoomByID(List<Room> room) {
+        List<String> nameRoom = new ArrayList<>();
+        for (Room room1 : room) {
+            nameRoom.add(room1.getRoomName());
+            return nameRoom;
         }
+        return null;
     }
 
     private Room populateRoom(RoomRequest request) throws IOException {
