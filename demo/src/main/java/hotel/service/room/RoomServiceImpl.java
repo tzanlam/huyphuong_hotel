@@ -3,7 +3,6 @@ package hotel.service.room;
 import hotel.modal.entity.Room;
 import hotel.modal.request.RoomRequest;
 import hotel.repository.RoomRepository;
-import hotel.service.global.FirebaseService;
 import hotel.service.global.ImageService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -90,9 +88,8 @@ public class RoomServiceImpl implements RoomService {
         List<String> nameRoom = new ArrayList<>();
         for (Room room1 : room) {
             nameRoom.add(room1.getRoomName());
-            return nameRoom;
         }
-        return null;
+        return nameRoom;
     }
 
     private Room populateRoom(RoomRequest request) throws IOException {
