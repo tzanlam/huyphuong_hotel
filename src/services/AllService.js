@@ -29,8 +29,8 @@ const AllService = {
     sendMail(UserSendRequest){
         return api.post(`all/sendMail`, UserSendRequest)
     },
-    checkRoomName(id){
-        return api.get(`all/findRoomName/${id}`)
+    checkRoomName(listRoom){
+        return api.get('all/findRoomName', listRoom)
     }
 };
 
