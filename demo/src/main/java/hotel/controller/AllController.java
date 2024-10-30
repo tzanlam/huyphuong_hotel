@@ -84,8 +84,8 @@ public class AllController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/findRoomName/{id}")
-    public ResponseEntity<?> findRoomName(@PathVariable int id) {
-        return new ResponseEntity<>(roomService.findNameRoomByID(id), HttpStatus.OK);
+    @GetMapping("/findRoomName")
+    public ResponseEntity<?> findRoomName(@RequestBody List<Room> rooms) {
+        return new ResponseEntity<>(roomService.findNameRoomByID(rooms), HttpStatus.OK);
     }
 }
