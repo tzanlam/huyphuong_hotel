@@ -3,7 +3,6 @@ package hotel.service.room;
 import hotel.modal.entity.Room;
 import hotel.modal.request.RoomRequest;
 import hotel.repository.RoomRepository;
-import hotel.service.global.ImageService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,11 +23,6 @@ public class RoomServiceImpl implements RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
-
-    @Autowired
-    private ImageService imageService;
-
-
     @Override
     public Page<Room> findAll(int page) {
         return roomRepository.findAll(PageRequest.of(page, 10));
@@ -81,15 +74,6 @@ public class RoomServiceImpl implements RoomService {
 
         // Trả về danh sách các phòng còn trống
         return availableRooms;
-    }
-
-    @Override
-    public List<String> findNameRoomByID(List<Room> room) {
-        List<String> nameRoom = new ArrayList<>();
-        for (Room room1 : room) {
-            nameRoom.add(room1.getRoomName());
-        }
-        return nameRoom;
     }
 
     private Room populateRoom(RoomRequest request) throws IOException {

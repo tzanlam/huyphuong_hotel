@@ -14,5 +14,4 @@ public interface RoomService {
     Room delete(int id);
     Room findById(int id);
     List<Room> checkRoomAvailability(String checkin, String checkout);
-    List<String> findNameRoomByID(List<Room> room);
 }
